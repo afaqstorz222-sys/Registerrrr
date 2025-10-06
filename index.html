@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل في الإيفنت - AFAQ Stores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+        import { getDatabase, ref, push, set, onValue, get, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDerI2KfEJxkN6BB7vbbfKIp5zoVwnp4AM",
+            authDomain: "news-f35d6.firebaseapp.com",
+            databaseURL: "https://news-f35d6-default-rtdb.firebaseio.com",
+            projectId: "news-f35d6",
+            storageBucket: "news-f35d6.firebasestorage.app",
+            messagingSenderId: "732894263757",
+            appId: "1:732894263757:web:53f28b8c7e68a0f0206c84"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // جعل المتغيرات متاحة عالمياً
+        window.firebaseDatabase = database;
+        window.firebaseRef = ref;
+        window.firebasePush = push;
+        window.firebaseSet = set;
+        window.firebaseOnValue = onValue;
+        window.firebaseGet = get;
+        window.firebaseQuery = query;
+        window.firebaseOrderByChild = orderByChild;
+        window.firebaseEqualTo = equalTo;
+    </script>
+    
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .success-animation {
+            animation: successPulse 0.6s ease-in-out;
+        }
+        @keyframes successPulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .orange-gradient {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        }
+        .orange-gradient-light {
+            background: linear-gradient(135deg, #fdba74 0%, #fb923c 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .input-focus:focus {
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+        }
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+        .btn-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .logo-container {
+            width: 5rem;
+            height: 5rem;
+            position: relative;
+        }
+        .logo-image {
+            width: 150%;
+            height: 150%;
+            object-fit: contain;
+            transform: scale(1.8);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1.8);
+        }
+        
+        .developer-credit {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* تنسيقات التنبيهات */
+        .notification {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            max-width: 400px;
+            margin: 0 auto;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen font-sans">
+    <!-- خلفية متحركة -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-1/2 -right-1/2 w-full h-full opacity-10">
+            <div class="absolute top-1/4 right-1/4 w-64 h-64 rounded-full bg-white pulse-animation"></div>
+            <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full bg-white pulse-animation" style="animation-delay: 0.5s;"></div>
+            <div class="absolute bottom-1/4 right-1/3 w-32 h-32 rounded-full bg-white pulse-animation" style="animation-delay: 1s;"></div>
+        </div>
+    </div>
+
+    <div class="min-h-screen flex items-center justify-center p-4 relative z-10">
+        <div class="max-w-md w-full">
+            <!-- Header -->
+            <div class="text-center mb-8 fade-in">
+                <div class="flex items-center justify-center mb-4">
+                    <div class="logo-container bg-white rounded-2xl flex items-center justify-center shadow-lg btn-hover overflow-hidden">
+                        <img src="afaq12.png" alt="AFAQ Stores" class="logo-image">
+                    </div>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-2">AFAQ Stores</h1>
+                <p class="text-white text-opacity-90 text-lg">مرحباً بك في إيفنتنا المميز!</p>
+                <div class="text-6xl mt-4 floating">🎉</div>
+            </div>
+
+            <!-- الوقت والتاريخ المصري -->
+            <div class="glass-effect rounded-2xl p-4 mb-6 text-white fade-in text-center">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-clock ml-2"></i>
+                        <span id="egyptTime" class="text-xl font-bold">--:--:--</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-calendar ml-2"></i>
+                        <span id="egyptDate" class="text-lg">--/--/----</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <div class="bg-white rounded-2xl card-shadow p-8 fade-in relative overflow-hidden">
+                <!-- زخرفة خلفية -->
+                <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full orange-gradient-light opacity-10"></div>
+                <div class="absolute -bottom-10 -left-10 w-24 h-24 rounded-full orange-gradient-light opacity-10"></div>
+                
+                <div class="text-center mb-6 relative z-10">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                        <i class="fas fa-file-alt text-orange-500 ml-2"></i>
+                        نموذج التسجيل
+                    </h2>
+                    <p class="text-gray-600">املأ البيانات التالية للتسجيل في إيفنت AFAQ Stores</p>
+                </div>
+
+                <form id="registrationForm" class="space-y-6 relative z-10">
+                    <div class="relative">
+                        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-user text-orange-500 ml-1"></i>
+                            الاسم الكامل
+                        </label>
+                        <div class="relative">
+                            <input type="text"
+                                    id="fullName"
+                                    name="fullName"
+                                    required
+                                   placeholder="أدخل اسمك الكامل"
+                                   class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg input-focus transition duration-200 text-lg">
+                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                        </div>
+                        <div id="nameValidation" class="text-xs mt-1 flex items-center hidden">
+                            <i class="fas fa-check-circle text-green-500 ml-1"></i>
+                            <span class="text-green-500">الاسم صالح</span>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <label for="phoneNumber" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-mobile-alt text-orange-500 ml-1"></i>
+                            رقم الموبايل
+                        </label>
+                        <div class="relative">
+                            <input type="tel"
+                                    id="phoneNumber"
+                                    name="phoneNumber"
+                                    required
+                                   placeholder="01xxxxxxxxx"
+                                   pattern="[0-9]{11}"
+                                   class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg input-focus transition duration-200 text-lg">
+                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                        </div>
+                        <div id="phoneValidation" class="text-xs mt-1 flex items-center hidden">
+                            <i class="fas fa-check-circle text-green-500 ml-1"></i>
+                            <span class="text-green-500">رقم صالح</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">يجب أن يكون الرقم 11 رقم ويبدأ بـ 01</p>
+                    </div>
+
+                    <!-- حقل المدينة الجديد -->
+                    <div class="relative">
+                        <label for="city" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-city text-orange-500 ml-1"></i>
+                            المدينة / العنوان
+                        </label>
+                        <div class="relative">
+                            <input type="text"
+                                    id="city"
+                                    name="city"
+                                    required
+                                   placeholder="أدخل مدينتك أو عنوانك"
+                                   class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg input-focus transition duration-200 text-lg">
+                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                        </div>
+                        <div id="cityValidation" class="text-xs mt-1 flex items-center hidden">
+                            <i class="fas fa-check-circle text-green-500 ml-1"></i>
+                            <span class="text-green-500">المدينة صالحة</span>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                             id="submitBtn"
+                            class="w-full orange-gradient text-white py-4 px-6 rounded-lg font-bold text-lg btn-hover transition duration-300 flex items-center justify-center gap-2 shadow-md">
+                        <i class="fas fa-user-plus"></i>
+                        تسجيل في الإيفنت
+                    </button>
+                </form>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="hidden mt-6 p-4 bg-green-50 border border-green-200 rounded-lg relative z-10">
+                    <div class="flex items-center">
+                        <div class="text-green-500 text-2xl ml-3">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-green-800 font-semibold">تم التسجيل بنجاح!</h3>
+                            <p class="text-green-600 text-sm">شكراً لك، سيتم التواصل معك قريباً</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="hidden mt-6 p-4 bg-red-50 border border-red-200 rounded-lg relative z-10">
+                    <div class="flex items-center">
+                        <div class="text-red-500 text-2xl ml-3">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-red-800 font-semibold">خطأ في التسجيل</h3>
+                            <p id="errorText" class="text-red-600 text-sm"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics - تم التعديل هنا -->
+            <div class="mt-8 glass-effect rounded-2xl p-6 text-white fade-in">
+                <div class="text-center">
+                    <h3 class="text-lg font-semibold mb-2">
+                        <i class="fas fa-chart-bar ml-2"></i>
+                        إحصائيات التسجيل
+                    </h3>
+                    <div class="flex justify-center items-center">
+                        <div class="text-center">
+                            <div id="totalCount" class="text-4xl font-bold">0</div>
+                            <div class="text-lg opacity-90">إجمالي المسجلين</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-6 text-white text-opacity-75 text-sm fade-in">
+                <p>
+                    <i class="fas fa-lock ml-1"></i>
+                    بياناتك محمية ولن يتم مشاركتها مع أطراف خارجية
+                </p>
+                
+                <!-- اسم المطور -->
+                <div class="developer-credit">
+                    <p>Developed by Ibrahim Al Sharkawi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // دالة للحصول على الوقت والتاريخ المصري بنظام 12 ساعة
+        function getEgyptDateTime() {
+            const now = new Date();
+            
+            // استخدام التوقيت المحلي لمصر (توقيت القاهرة)
+            const options = {
+                timeZone: 'Africa/Cairo',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true // استخدام نظام 12 ساعة
+            };
+            
+            const formatter = new Intl.DateTimeFormat('ar-EG', options);
+            const parts = formatter.formatToParts(now);
+            
+            // استخراج الأجزاء من النتيجة
+            let day, month, year, hour, minute, second, dayPeriod;
+            
+            for (const part of parts) {
+                switch (part.type) {
+                    case 'day': day = part.value; break;
+                    case 'month': month = part.value; break;
+                    case 'year': year = part.value; break;
+                    case 'hour': hour = part.value; break;
+                    case 'minute': minute = part.value; break;
+                    case 'second': second = part.value; break;
+                    case 'dayPeriod': dayPeriod = part.value; break;
+                }
+            }
+            
+            // تحويل "صباحًا" و"مساءً" إلى "صباحاً" و"مساءً"
+            const arabicDayPeriod = dayPeriod === 'ص' ? 'صباحاً' : 'مساءً';
+            
+            return {
+                date: `${day}/${month}/${year}`,
+                time: `${hour}:${minute}:${second} ${arabicDayPeriod}`,
+                fullDateTime: `${day}/${month}/${year} ${hour}:${minute}:${second} ${arabicDayPeriod}`,
+                dateObject: new Date(now.toLocaleString("en-US", {timeZone: "Africa/Cairo"}))
+            };
+        }
+
+        // تحديث الوقت والتاريخ المصري
+        function updateEgyptDateTime() {
+            const egyptDateTime = getEgyptDateTime();
+            document.getElementById('egyptTime').textContent = egyptDateTime.time;
+            document.getElementById('egyptDate').textContent = egyptDateTime.date;
+        }
+
+        // تحديث الوقت كل ثانية
+        setInterval(updateEgyptDateTime, 1000);
+        updateEgyptDateTime(); // التشغيل الأولي
+
+        // وظائف Firebase المحسنة
+        function saveToFirebase(registration) {
+            return new Promise((resolve, reject) => {
+                try {
+                    const registrationsRef = window.firebaseRef(window.firebaseDatabase, 'eventRegistrations');
+                    const newRegistrationRef = window.firebasePush(registrationsRef);
+                    
+                    window.firebaseSet(newRegistrationRef, registration)
+                        .then(() => {
+                            console.log('تم حفظ البيانات في Firebase بنجاح');
+                            resolve(newRegistrationRef.key);
+                        })
+                        .catch((error) => {
+                            console.error('خطأ في حفظ البيانات في Firebase:', error);
+                            reject(error);
+                        });
+                } catch (error) {
+                    console.error('خطأ في الاتصال بـ Firebase:', error);
+                    reject(error);
+                }
+            });
+        }
+
+        // التحقق من وجود الرقم في Firebase
+        function isPhoneRegisteredInFirebase(phone) {
+            return new Promise((resolve, reject) => {
+                try {
+                    const registrationsRef = window.firebaseRef(window.firebaseDatabase, 'eventRegistrations');
+                    const phoneQuery = window.firebaseQuery(
+                        registrationsRef, 
+                        window.firebaseOrderByChild('phone'), 
+                        window.firebaseEqualTo(phone)
+                    );
+                    
+                    window.firebaseGet(phoneQuery)
+                        .then((snapshot) => {
+                            resolve(snapshot.exists());
+                        })
+                        .catch((error) => {
+                            console.error('خطأ في التحقق من الرقم:', error);
+                            reject(error);
+                        });
+                } catch (error) {
+                    console.error('خطأ في الاتصال بـ Firebase:', error);
+                    reject(error);
+                }
+            });
+        }
+
+        function getRegistrationsFromFirebase() {
+            return new Promise((resolve, reject) => {
+                try {
+                    const registrationsRef = window.firebaseRef(window.firebaseDatabase, 'eventRegistrations');
+                    
+                    window.firebaseOnValue(registrationsRef, (snapshot) => {
+                        const data = snapshot.val();
+                        const registrations = data ? Object.values(data) : [];
+                        resolve(registrations);
+                    }, (error) => {
+                        console.error('خطأ في جلب البيانات من Firebase:', error);
+                        reject(error);
+                    });
+                } catch (error) {
+                    console.error('خطأ في الاتصال بـ Firebase:', error);
+                    reject(error);
+                }
+            });
+        }
+
+        // وظائف LocalStorage - تم التعديل لاستخدام مفتاح موحد
+        function getRegistrations() {
+            try {
+                const registrations = localStorage.getItem('afaqEventRegistrations');
+                return registrations ? JSON.parse(registrations) : [];
+            } catch (error) {
+                console.error('Error loading registrations:', error);
+                return [];
+            }
+        }
+
+        function saveRegistrations(registrations) {
+            try {
+                localStorage.setItem('afaqEventRegistrations', JSON.stringify(registrations));
+                // إرسال حدث لتحديث الصفحات الأخرى
+                window.dispatchEvent(new Event('storageUpdated'));
+                return true;
+            } catch (error) {
+                console.error('Error saving registrations:', error);
+                return false;
+            }
+        }
+
+        function addRegistration(registration) {
+            const registrations = getRegistrations();
+            registrations.push(registration);
+            const success = saveRegistrations(registrations);
+            return success ? registrations : null;
+        }
+
+        // تحميل الإحصائيات - تم التعديل هنا
+        function loadStats() {
+            try {
+                // محاولة جلب البيانات من Firebase أولاً
+                getRegistrationsFromFirebase()
+                    .then(registrations => {
+                        document.getElementById('totalCount').textContent = registrations.length;
+                    })
+                    .catch(error => {
+                        // إذا فشل الاتصال بـ Firebase، استخدم LocalStorage
+                        console.warn('استخدام LocalStorage كبديل:', error);
+                        const registrations = getRegistrations();
+                        document.getElementById('totalCount').textContent = registrations.length;
+                    });
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // التحقق من صحة رقم الموبايل
+        function validatePhone(phone) {
+            const phoneRegex = /^01[0-9]{9}$/;
+            return phoneRegex.test(phone);
+        }
+
+        // التحقق من وجود رقم مسجل مسبقاً (محلي + Firebase)
+        async function isPhoneRegistered(phone) {
+            // التحقق من LocalStorage أولاً
+            const localRegistrations = getRegistrations();
+            const isLocalRegistered = localRegistrations.some(reg => reg.phone === phone);
+            
+            if (isLocalRegistered) {
+                return true;
+            }
+            
+            // التحقق من Firebase
+            try {
+                const isFirebaseRegistered = await isPhoneRegisteredInFirebase(phone);
+                return isFirebaseRegistered;
+            } catch (error) {
+                console.warn('فشل التحقق من Firebase، استخدام LocalStorage فقط:', error);
+                return false;
+            }
+        }
+
+        // إظهار رسالة النجاح
+        function showSuccess() {
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+
+            errorMsg.classList.add('hidden');
+            successMsg.classList.remove('hidden');
+            successMsg.classList.add('success-animation');
+
+            // إخفاء الرسالة بعد 5 ثواني
+            setTimeout(() => {
+                successMsg.classList.add('hidden');
+            }, 5000);
+        }
+
+        // إظهار رسالة الخطأ
+        function showError(message) {
+            const errorMsg = document.getElementById('errorMessage');
+            const successMsg = document.getElementById('successMessage');
+            const errorText = document.getElementById('errorText');
+
+            successMsg.classList.add('hidden');
+            errorText.textContent = message;
+            errorMsg.classList.remove('hidden');
+
+            // إخفاء الرسالة بعد 5 ثواني
+            setTimeout(() => {
+                errorMsg.classList.add('hidden');
+            }, 5000);
+        }
+
+        // إظهار إشعار
+        function showNotification(message, type = 'info') {
+            // إزالة الإشعارات الموجودة
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            // تحديد لون الإشعار حسب النوع
+            let bgColor = 'bg-orange-500';
+            if (type === 'success') bgColor = 'bg-green-500';
+            if (type === 'error') bgColor = 'bg-red-500';
+            if (type === 'warning') bgColor = 'bg-yellow-500';
+
+            // إنشاء عنصر الإشعار
+            const notification = document.createElement('div');
+            notification.className = `notification ${bgColor} text-white p-4 rounded-lg shadow-lg`;
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="ml-2">${message}</span>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-white hover:text-gray-200">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+
+            // إضافة الإشعار إلى الصفحة
+            document.body.appendChild(notification);
+
+            // إزالة الإشعار تلقائياً بعد 3 ثواني
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        // الاستماع لتحديثات التخزين من الصفحات الأخرى
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'afaqEventRegistrations') {
+                loadStats();
+            }
+        });
+
+        // الاستماع للأحداث المخصصة
+        window.addEventListener('storageUpdated', function() {
+            loadStats();
+        });
+
+        // معالج إرسال النموذج المحسن
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+
+            // تغيير نص الزر أثناء المعالجة
+            submitBtn.innerHTML = `
+                <i class="fas fa-spinner fa-spin"></i>
+                جاري التسجيل...
+            `;
+            submitBtn.disabled = true;
+
+            // الحصول على البيانات
+            const name = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phoneNumber').value.trim();
+            const city = document.getElementById('city').value.trim();
+
+            // التحقق من صحة البيانات
+            if (!name || name.length < 3) {
+                showError('يجب أن يكون الاسم 3 أحرف على الأقل');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+
+            if (!validatePhone(phone)) {
+                showError('رقم الموبايل غير صحيح. يجب أن يبدأ بـ 01 ويكون 11 رقم');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+
+            if (!city || city.length < 2) {
+                showError('يجب إدخال المدينة أو العنوان');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+
+            try {
+                // التحقق من عدم تسجيل الرقم مسبقاً
+                const isRegistered = await isPhoneRegistered(phone);
+                if (isRegistered) {
+                    showError('هذا الرقم مسجل مسبقاً. يرجى استخدام رقم آخر');
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    return;
+                }
+
+                // الحصول على الوقت المصري
+                const egyptDateTime = getEgyptDateTime();
+                
+                // إنشاء كائن التسجيل
+                const registration = {
+                    id: Date.now().toString(),
+                    name: name,
+                    phone: phone,
+                    city: city,
+                    timestamp: egyptDateTime.fullDateTime,
+                    timestampDate: egyptDateTime.dateObject.toISOString(),
+                    source: 'registration_page',
+                    registeredAt: new Date().toISOString()
+                };
+
+                // محاولة حفظ البيانات في Firebase أولاً
+                await saveToFirebase(registration);
+                
+                // حفظ نسخة احتياطية في LocalStorage
+                addRegistration(registration);
+                
+                // إظهار رسالة النجاح
+                showSuccess();
+                showNotification('✅ تم التسجيل بنجاح!', 'success');
+
+                // إعادة تعيين النموذج
+                document.getElementById('registrationForm').reset();
+
+                // إخفاء رسائل التحقق
+                document.getElementById('nameValidation').classList.add('hidden');
+                document.getElementById('phoneValidation').classList.add('hidden');
+                document.getElementById('cityValidation').classList.add('hidden');
+
+                // إعادة تعيين حدود الحقول
+                document.getElementById('fullName').classList.remove('border-green-300');
+                document.getElementById('phoneNumber').classList.remove('border-green-300');
+                document.getElementById('city').classList.remove('border-green-300');
+
+                // تحديث الإحصائيات
+                loadStats();
+
+            } catch (error) {
+                console.error('Registration error:', error);
+                if (error.message.includes('مسجل مسبقاً')) {
+                    showError('هذا الرقم مسجل مسبقاً. يرجى استخدام رقم آخر');
+                } else {
+                    showError('حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى');
+                }
+            } finally {
+                // إعادة تعيين الزر
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // تحديث الإحصائيات كل 3 ثواني
+        setInterval(loadStats, 3000);
+
+        // تحميل الإحصائيات عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStats();
+        });
+
+        // التحقق من صحة رقم الموبايل أثناء الكتابة
+        document.getElementById('phoneNumber').addEventListener('input', function(e) {
+            const phone = e.target.value;
+            const isValid = validatePhone(phone);
+            const validationMsg = document.getElementById('phoneValidation');
+
+            if (phone.length > 0) {
+                if (isValid) {
+                    e.target.classList.remove('border-red-300');
+                    e.target.classList.add('border-green-300');
+                    validationMsg.classList.remove('hidden');
+                } else {
+                    e.target.classList.remove('border-green-300');
+                    e.target.classList.add('border-red-300');
+                    validationMsg.classList.add('hidden');
+                }
+            } else {
+                e.target.classList.remove('border-red-300', 'border-green-300');
+                validationMsg.classList.add('hidden');
+            }
+        });
+
+        // التحقق من صحة الاسم أثناء الكتابة
+        document.getElementById('fullName').addEventListener('input', function(e) {
+            const name = e.target.value.trim();
+            const validationMsg = document.getElementById('nameValidation');
+
+            if (name.length > 0) {
+                if (name.length >= 3) {
+                    e.target.classList.remove('border-red-300');
+                    e.target.classList.add('border-green-300');
+                    validationMsg.classList.remove('hidden');
+                } else {
+                    e.target.classList.remove('border-green-300');
+                    e.target.classList.add('border-red-300');
+                    validationMsg.classList.add('hidden');
+                }
+            } else {
+                e.target.classList.remove('border-red-300', 'border-green-300');
+                validationMsg.classList.add('hidden');
+            }
+        });
+
+        // التحقق من صحة المدينة أثناء الكتابة
+        document.getElementById('city').addEventListener('input', function(e) {
+            const city = e.target.value.trim();
+            const validationMsg = document.getElementById('cityValidation');
+
+            if (city.length > 0) {
+                if (city.length >= 2) {
+                    e.target.classList.remove('border-red-300');
+                    e.target.classList.add('border-green-300');
+                    validationMsg.classList.remove('hidden');
+                } else {
+                    e.target.classList.remove('border-green-300');
+                    e.target.classList.add('border-red-300');
+                    validationMsg.classList.add('hidden');
+                }
+            } else {
+                e.target.classList.remove('border-red-300', 'border-green-300');
+                validationMsg.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
